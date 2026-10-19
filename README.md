@@ -1,47 +1,58 @@
-# Cadastro de Cliente — versão para hospedagem comum (PHP)
+# Formulário de Pré Cadastro de Clientes
 
-Tudo que está nesta pasta vai para a pasta pública do seu site (ex.: `public_html`). Não precisa de Node, Composer nem nada fora dela.
+Este projeto é uma aplicação web simples para o Pré-cadastro de clientes, com validação de campos e integração com uma API [SGP](https://www.tsmx.net.br/sgp/). A aplicação foi projetada para ser responsiva e funcional em dispositivos móveis e navegadores modernos.
 
-## ⚠️ Antes de publicar: revogue os tokens antigos
+## 🎯 Funcionalidades
 
-Os tokens do antigo `config.js` ficaram legíveis por qualquer visitante.
-1. **SGP**: gere um novo token e desative o antigo.
-2. **Telegram**: no @BotFather use `/revoke` e guarde o novo token.
-3. **Apague o `config.js` e o `submitForm.js` antigos** do servidor. Se já estiveram no Git, os tokens ficam no histórico: o que protege é revogá-los.
+- Formulário com campos para informações do cliente, como:
+  - Nome
+  - CPF/CNPJ
+  - E-mail
+  - Celular
+  - Endereço
+  - Data de nascimento
+  - Plano e dia de vencimento <-> Coletados na API do SGP
+  - Envio de coordenadas geográficas direto no Formulário.
+    
+- Validação de CPF e CNPJ diretamente no front-end.
+- Preenchimento dinâmico de opções de planos e vencimentos a partir de uma API.
+- Feedback visual para envios bem-sucedidos e mensagens de erro.
+- Redirecionamento para uma página de sucesso após o cadastro.
 
-## Instalação
+## 🚀 Como Usar
 
-1. Edite `api/config.php` e coloque o **novo** token do SGP (e, se quiser, o do Telegram e o chat id).
-2. Envie **todo o conteúdo** da pasta `site/` para a pasta pública, mantendo a pasta `api/`.
-   Atenção: os arquivos `.htaccess` (na raiz e em `api/`) começam com ponto e às vezes ficam ocultos no gerenciador de arquivos. Confirme que foram enviados.
-3. Requisitos: PHP 7.4+ com a extensão cURL (padrão na grande maioria das hospedagens).
+## Antes de começar a confugurar o projeto no servidor será necessário antes de tudo configurar o seu nginx ou apache2 para aceitar coleta de localização do usuario.
 
-## Como os segredos ficam protegidos
+### No nginx
+```
+# nano /etc/nginx/SEUARQUIVODECONFIGURAÇÃO.conf
 
-O navegador só fala com `api/opcoes.php` e `api/cadastro.php`. Esses arquivos são PHP: o servidor os **executa**, então ninguém vê o código nem os tokens, que ficam em `api/config.php`.
+add_header Permissions-Policy "geolocation=(self)";
+```
+```
+# service nginx restart
+```
+### No apache2
+```
+# nano /etc/apache2/SEUARQUIVODECONFIGURAÇÃO.conf
 
-Proteções em camadas para o `config.php`:
-- é PHP e não imprime nada se aberto direto (devolve 403);
-- `api/.htaccess` bloqueia o acesso direto em Apache/LiteSpeed.
+<IfModule mod_headers.c>
+    Header set Permissions-Policy "geolocation=(self)"
+</IfModule>
+```
+```
+# service apache2 restart
+```
+## Agora podemos baixar o projeto e configurar.
+### 1. Clonar o Repositório
+Clone o projeto para sua máquina local
 
-**Faça este teste depois de publicar:**
-abra `https://seusite/api/config.php` e `https://seusite/api/_bootstrap.php`. O resultado deve ser página em branco ou "403/Forbidden". Se aparecer código, o PHP não está sendo executado nessa pasta: apague os arquivos e fale com o suporte da hospedagem.
+### 2. Configuração
+Edite o arquivo config.js para definir a URL da API e o TOKEN de autenticação:
 
-**Regra de ouro:** nunca deixe cópias como `config.php.bak`, `config.php~`, `config - cópia.php` ou `config.txt` no servidor; elas são entregues como texto puro.
+## Segue exemplo.
 
-## O que o backend faz
+![Vídeo sem título ‐ Feito com o Clipchamp](https://github.com/user-attachments/assets/731103a7-9bbd-49be-85a8-0a103126a644)
 
-- Lista planos, vencimentos e vendedores do SGP (cache de 5 min, só campos necessários).
-- Valida tudo no servidor (CPF/CNPJ, e-mail, data, CEP, UF, coordenadas, plano/vencimento/vendedor existentes) e repassa ao SGP somente campos conhecidos.
-- Envia o cadastro ao SGP e, **só se for aceito**, avisa no Telegram (CPF/CNPJ mascarado).
-- Limite por IP (10 cadastros a cada 15 min; 60 consultas/min), corpo máximo de 10 KB, bloqueio de POST vindo de outros sites, campo-armadilha contra robôs.
-- Erros PHP nunca aparecem ao visitante; mensagens genéricas na tela, detalhes no log do servidor.
-- Cabeçalhos de segurança (CSP etc.) via `.htaccess`.
 
-## Ajustes pequenos além da segurança
-CPF com dígitos todos iguais agora é rejeitado; corrigidos `lang`, `label` do CEP e `maxlength` duplicado; mapa em largura total.
 
-## Dúvidas comuns
-- **Mapa não aparece:** a CSP do `.htaccess` pode estar restritiva demais para o seu servidor; em último caso remova a linha `Content-Security-Policy`.
-- **Cloudflare na frente:** em `config.php` use `'ip_header' => 'HTTP_CF_CONNECTING_IP'`.
-- **Servidor Nginx (sem .htaccess):** a proteção do `config.php` continua valendo pelo código; os cabeçalhos de segurança precisariam ser configurados no próprio Nginx.
