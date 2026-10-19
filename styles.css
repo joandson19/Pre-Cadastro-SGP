@@ -1,0 +1,128 @@
+html, body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #28a745;
+}
+
+p {
+    font-size: 16px;
+    color: #333;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    grid-column: span 2;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+#loadingSpinner {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+/* Estilos que antes eram inline (necessário para uma CSP restritiva) */
+.hidden {
+    display: none !important;
+}
+
+#mapContainer {
+    grid-column: 1 / -1;
+    margin-top: 10px;
+}
+
+#map {
+    height: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#mapContainer button {
+    grid-column: auto;
+    margin-top: 10px;
+}
+
+/* Campo-armadilha para robôs: fora da tela, sem ocupar espaço no grid */
+.hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.turnstile-box {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+    form {
+        grid-template-columns: 1fr;
+    }
+    button {
+        grid-column: span 1;
+    }
+}

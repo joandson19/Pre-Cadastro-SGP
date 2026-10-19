@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Cliente</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Leaflet (mapa) com verificação de integridade (SRI) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="">
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+</head>
+<body>
+<div class="container">
+    <h1>Cadastro de Cliente</h1>
+    <form id="registrationForm">
+        <div>
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Digite o nome do cliente" maxlength="120" autocomplete="name" required>
+        </div>
+        <div>
+            <label for="cpfcnpj">CPF/CNPJ</label>
+            <input type="text" id="cpfcnpj" name="cpfcnpj" placeholder="Digite o CPF ou CNPJ" maxlength="18" inputmode="numeric" required>
+        </div>
+        <div>
+            <label for="datanasc">Data de Nascimento</label>
+            <input type="date" id="datanasc" name="datanasc">
+        </div>
+        <div>
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="Digite o e-mail" maxlength="254" autocomplete="email" required>
+        </div>
+        <div>
+            <label for="celular">Celular</label>
+            <input type="tel" id="celular" name="celular" placeholder="Digite o número de celular" maxlength="11" pattern="[0-9]*" autocomplete="tel" required>
+        </div>
+        <div>
+            <label for="plano">Plano</label>
+            <select id="plano" name="plano" required>
+                <option value="">Selecione...</option>
+            </select>
+        </div>
+        <div>
+            <label for="vencimento">Dia de Vencimento</label>
+            <select id="vencimento" name="vencimento" required>
+                <option value="">Selecione...</option>
+            </select>
+        </div>
+        <div>
+            <label for="cep">CEP</label>
+            <input type="text" id="cep" name="cep" placeholder="Digite o CEP sem pontos ou traços" maxlength="8" inputmode="numeric" pattern="[0-9]*" autocomplete="postal-code" required>
+        </div>
+        <div>
+            <label for="logradouro">Endereço</label>
+            <input type="text" id="logradouro" name="logradouro" placeholder="Digite seu endereço" maxlength="150" required>
+        </div>
+        <div>
+            <label for="numero">Número</label>
+            <input type="text" id="numero" name="numero" placeholder="Digite o número da casa" maxlength="20" required>
+        </div>
+        <div>
+            <label for="bairro">Bairro</label>
+            <input type="text" id="bairro" name="bairro" placeholder="Digite seu bairro" maxlength="80" required>
+        </div>
+        <div>
+            <label for="pontoreferencia">Ponto de Referência ou Complemento</label>
+            <input type="text" id="pontoreferencia" name="pontoreferencia" placeholder="Digite ..." maxlength="150" required>
+        </div>
+        <div>
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" name="cidade" placeholder="Cidade" required readonly>
+        </div>
+        <div>
+            <label for="uf">Estado (UF)</label>
+            <input type="text" id="uf" name="uf" placeholder="UF" required readonly>
+        </div>
+        <div>
+            <label for="vendedor">Vendedor (opcional)</label>
+            <select id="vendedor" name="vendedor_id">
+                <option value="">Selecione um vendedor...</option>
+            </select>
+        </div>
+        <div>
+            <label for="enableMap">
+                <input type="checkbox" id="enableMap"> Informar localização!
+            </label>
+        </div>
+
+        <div id="mapContainer" class="hidden">
+            <div id="map"></div>
+            <input type="hidden" id="map_ll" name="map_ll">
+            <button type="button" id="getLocationButton">Usar minha localização atual</button>
+            <button type="button" id="centerMapButton" class="spaced">Centralizar Mapa</button>
+        </div>
+
+        <!-- Armadilha para robôs (honeypot): invisível para pessoas, não preencher -->
+        <div class="hp" aria-hidden="true">
+            <label for="website">Não preencha este campo</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- Verificação anti-robô (preenchida pelo app.js quando o Turnstile está configurado) -->
+        <div id="turnstileBox" class="turnstile-box"></div>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+</div>
+<script src="app.js" defer></script>
+</body>
+</html>
